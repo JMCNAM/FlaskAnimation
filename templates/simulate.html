@@ -3,36 +3,121 @@
 Simulations
 {% endblock %}
 {% block content %}
-<h1>Animation</h1>
-<div cclass="container">
-    <div class="column">
-        <form method="POST" class="form-container">
-            <label for="xo">Initial Position (xo):</label>
-            <input type="number" step="0.1" name="xo" value="10.0" required>
-        
-            <label for="vo">Initial Velocity (vo):</label>
-            <input type="number" step="0.1" name="vo" value="0.0" required>
-        
-            <label for="t_total">Total Time (t_total):</label>
-            <input type="number" step="1" name="t_total" value="120" required>
-        
-            <label for="N">Number of Steps (N):</label>
-            <input type="number" step="100" name="N" value="1000" required>
-        
-            <button type="submit">Generate Animation</button>
-        </form>
-        <div class="form-container">
-
+<h1 class="text-center mb-4">Numerical Simulation Interface</h1>
+<div class="row">
+    <!-- Left Column: Parameter Inputs -->
+    <div class="col-md-6">
+        <div class="card p-4 shadow-sm">
+            <form id="simulation-form">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="method" class="form-label">Numerical Method:</label>
+                        <select id="method" class="form-select">
+                            <option value="runge_kutta4">Runge-Kutta 4</option>
+                            <option value="runge_kutta2">Runge-Kutta 2</option>
+                            <option value="euler">Euler</option>
+                            <option value="verlet">Velocity Verlet</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="equation" class="form-label">Equation:</label>
+                        <select id="equation" class="form-select" onchange="updateParameters()">
+                            <option value="free_fall">Free Fall</option>
+                            <option value="fluid_resistance">Fluid Resistance</option>
+                            <option value="sho">Simple Harmonic Oscillator</option>
+                            <option value="dho">Damped Harmonic Oscillator</option>
+                            <option value="ddho">Damped Driven Harmonic Oscillator</option>
+                            <option value="pendulum">Pendulum</option>
+                            <option value="complex_pendulum">Complex Pendulum</option>
+                            <option value="mass_spring_damper">Mass-Spring-Damper</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="x0" class="form-label">Initial Position:</label>
+                        <input type="number" id="x0" class="form-control" value="0.5" step="0.1">
+                    </div>
+                    <div class="col">
+                        <label for="v0" class="form-label">Initial Velocity:</label>
+                        <input type="number" id="v0" class="form-control" value="0.0" step="0.1">
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="t_total" class="form-label">Total Simulation Time:</label>
+                        <input type="number" id="t_total" class="form-control" value="10" step="1">
+                    </div>
+                    <div class="col">
+                        <label for="N" class="form-label">Number of Steps:</label>
+                        <input type="number" id="N" class="form-control" value="1000" step="100">
+                    </div>
+                </div>
+                
+                <fieldset class="border p-3 mb-3">
+                    <legend class="h5">System Parameters</legend>
+                    <div id="parameters-container"></div>
+                </fieldset>
+            </form>
         </div>
     </div>
-    <div class="column">
-
+    
+    <!-- Right Column: Simulation Output -->
+    <div class="col-md-6 d-flex flex-column align-items-center">
+        <button type="button" id="simulate-btn" class="btn btn-primary mb-3">Run Simulation</button>
+        <div>
+            <img id="simulation-graph" src="{{ graph_url }}" alt="Simulation Output" class="img-fluid mt-3">
+        </div>
     </div>
 </div>
 
+<script>
+    const paramPresets = {
+        "free_fall": { "g": -9.8 },
+        "fluid_resistance": { "g": -9.8, "k": 0.1, "m": 1.0 },
+        "sho": { "k": 0.1, "m": 1.0 },
+        "dho": { "k": 5.0, "b": 0.05, "m": 1.0, "Fo": 10.0, "Wo": 0.2 },
+        "ddho": { "k": 5.0, "b": 0.05, "m": 1.0, "Fo": 10.0, "Wo": 0.2 },
+        "pendulum": { "g": -9.8, "L": 1.0 },
+        "complex_pendulum": { "g": 9.8, "L": 1.0, "m": 1.0, "damping": 0.1, "driving_force": 0.5, "driving_freq": 1.0 },
+        "mass_spring_damper": { "m": 1.0, "k": 1.0, "c": 0.2, "F0": 0.0, "omega": 0.0 }
+    };
 
-{% if plot_div %}
+    function updateParameters() {
+        const equation = document.getElementById("equation").value;
+        const container = document.getElementById("parameters-container");
+        container.innerHTML = "";
+
+        const params = paramPresets[equation] || {};
+        let rowDiv = null;
+        let count = 0;
+
+        for (const key in params) {
+            if (count % 2 === 0) {
+                rowDiv = document.createElement("div");
+                rowDiv.classList.add("row", "mb-2");
+                container.appendChild(rowDiv);
+            }
+
+            const colDiv = document.createElement("div");
+            colDiv.classList.add("col");
+            colDiv.innerHTML = `
+                <label class='form-label'>${key}:</label>
+                <input type='number' class='form-control' id='${key}' value='${params[key]}' step='0.1'>
+            `;
+
+            rowDiv.appendChild(colDiv);
+            count++;
+        }
+    }
+    document.addEventListener("DOMContentLoaded", updateParameters);
+
+</script>
+
+<!-- {% if plot_div %}
 <h2>Animation</h2>
 <div id="plot">{{ plot_div|safe }}</div>
-{% endif %}
+{% endif %} -->
 {% endblock %}
