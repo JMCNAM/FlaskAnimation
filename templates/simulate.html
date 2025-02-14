@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}
+Simulations
+{% endblock %}
+{% block content %}
+<h1>Animation</h1>
+<div cclass="container">
+    <div class="column">
+        <form method="POST" class="form-container">
+            <label for="xo">Initial Position (xo):</label>
+            <input type="number" step="0.1" name="xo" value="10.0" required>
+        
+            <label for="vo">Initial Velocity (vo):</label>
+            <input type="number" step="0.1" name="vo" value="0.0" required>
+        
+            <label for="t_total">Total Time (t_total):</label>
+            <input type="number" step="1" name="t_total" value="120" required>
+        
+            <label for="N">Number of Steps (N):</label>
+            <input type="number" step="100" name="N" value="1000" required>
+        
+            <button type="submit">Generate Animation</button>
+        </form>
+        <div class="form-container">
+
+        </div>
+    </div>
+    <div class="column">
+
+    </div>
+</div>
+
+
+{% if plot_div %}
+<h2>Animation</h2>
+<div id="plot">{{ plot_div|safe }}</div>
+{% endif %}
+{% endblock %}
