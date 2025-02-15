@@ -98,7 +98,6 @@ def animateData():
 
         equation = data["equation"]
         param_ranges = data["params"]  # Extract nested dictionary
-        print("Parameter Ranges:", param_ranges)  # Debugging line
         t_total = float(data["t_total"])
         N = int(data["N"])
 
@@ -111,50 +110,12 @@ def animateData():
         print("Animating Equation:", equation)  # Debugging line
         print("Calculated Step Size:", step_size)  # Debugging line
 
-        # Ensure at least one parameter has a valid range
-        varying_param = None
-        for param, values in param_ranges.items():
-            print(f"Checking parameter: {param}, values: {values}")  # Debugging line
-            if isinstance(values, dict) and values.get("step", 0) > 0:
-                varying_param = param
-                break
-        print("Varying Parameter:", varying_param)  # Debugging line
-        if not varying_param:
-            return jsonify({"error": "No parameter with a valid range (step > 0)."}), 400
-
-        print("Param Ranges:", param_ranges)
-
-        # Ensure at least one parameter has a valid range
-        varying_param = None
-        for param, values in param_ranges.items():
-            print(f"Checking parameter: {param}, values: {values}")  # Debugging line
-            if isinstance(values, dict) and values.get("step") is not None and values["step"] > 0:
-                varying_param = param
-                break
-
-        print("Varying Parameter:", varying_param)  # Debugging line
-
-        # ✅ Handle case where no varying parameter is found
-        #if not varying_param:
-        #    print("Error: No parameter has a valid step size greater than 0.")  # Debugging line
-        #    return jsonify({
-        #        "error": "No parameter with a valid range (step > 0). Ensure at least one parameter has a step size greater than 0."
-        #    }), 400
-
-        print("Param Ranges:", param_ranges)
-
-        # Ensure varying_param exists in param_ranges and is a dictionary
-        param_values = param_ranges.get(varying_param, {})
-
-        if not isinstance(param_values, dict):
-            return jsonify({
-                "error": f"Parameter {varying_param} is not a valid range dictionary. Ensure it contains 'min', 'max', and 'step'."
-            }), 400
 
         # Extract min, max, and step for the varying parameter, ensuring they are valid
-        min_val = param_values.get("min", 1)  # Default to 1 if missing
-        max_val = param_values.get("max", 10)  # Default to 10 if missing
-        step = param_values.get("step", 1)  # Default to 1 if missing
+        varying_param = param_ranges["varying_param"]  # Default to None if missing
+        min_val = param_ranges["min"]  # Default to 1 if missing
+        max_val = param_ranges["max"]  # Default to 10 if missing
+        step = param_ranges["step"]    # Default to 1 if missing
 
         # Validate parameter ranges
         if min_val >= max_val:
