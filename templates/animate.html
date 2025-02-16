@@ -47,7 +47,7 @@
                     <legend class="h5">Select Parameter to Vary</legend>
                     <div class="mb-3">
                         <label for="varying-param" class="form-label">Parameter:</label>
-                        <select id="varying-param" class="form-select"></select>
+                        <select id="varying-param" class="form-select" onchange="updateNonVaryingParameters()"></select>
                     </div>
 
                     <div class="row">
@@ -64,6 +64,11 @@
                             <input type="number" id="param-step" class="form-control">
                         </div>
                     </div>
+                </fieldset>
+
+                <fieldset class="border p-3 mb-3">
+                    <legend class="h5">Set Non-Varying Parameters</legend>
+                    <div id="non-varying-params-container"></div>
                 </fieldset>
 
                 <button type="button" id="generate-animation-btn" class="btn btn-success w-100 mt-3">Generate Animation</button>

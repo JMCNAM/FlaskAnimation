@@ -1,12 +1,12 @@
 const paramPresets = {
-    "free_fall": ["g"],
-    "fluid_resistance": ["g", "k", "m"],
-    "sho": ["k", "m"],
-    "dho": ["k", "b", "m", "Fo", "Wo"],
-    "ddho": ["k", "b", "m", "Fo", "Wo"],
-    "pendulum": ["g", "L"],
-    "complex_pendulum": ["g", "L", "m", "damping", "driving_force", "driving_freq"],
-    "mass_spring_damper": ["m", "k", "c", "F0", "omega"]
+    "free_fall": { "g": -9.8 },
+    "fluid_resistance": { "g": -9.8, "k": 0.1, "m": 1.0 },
+    "sho": { "k": 0.1, "m": 1.0 },
+    "dho": { "k": 5.0, "b": 0.05, "m": 1.0, "Fo": 10.0, "Wo": 0.2 },
+    "ddho": { "k": 5.0, "b": 0.05, "m": 1.0, "Fo": 10.0, "Wo": 0.2 },
+    "pendulum": { "g": -9.8, "L": 1.0 },
+    "complex_pendulum": { "g": 9.8, "L": 1.0, "m": 1.0, "damping": 0.1, "driving_force": 0.5, "driving_freq": 1.0 },
+    "mass_spring_damper": { "m": 1.0, "k": 1.0, "c": 0.2, "F0": 0.0, "omega": 0.0 }
 };
 
 // Update parameter selection based on chosen equation
@@ -15,11 +15,33 @@ function updateAnimationParameters() {
     const paramDropdown = document.getElementById("varying-param");
     paramDropdown.innerHTML = "";
 
-    paramPresets[equation].forEach(param => {
+    Object.keys(paramPresets[equation]).forEach(param => {
         let option = document.createElement("option");
         option.value = param;
         option.textContent = param;
         paramDropdown.appendChild(option);
+    });
+
+    updateNonVaryingParameters();
+}
+
+// Update non-varying parameters based on selected varying parameter
+function updateNonVaryingParameters() {
+    const equation = document.getElementById("equation").value;
+    const varyingParam = document.getElementById("varying-param").value;
+    const nonVaryingParamsContainer = document.getElementById("non-varying-params-container");
+    nonVaryingParamsContainer.innerHTML = "";
+
+    Object.keys(paramPresets[equation]).forEach(param => {
+        if (param !== varyingParam) {
+            let paramDiv = document.createElement("div");
+            paramDiv.classList.add("mb-3");
+            paramDiv.innerHTML = `
+                <label for="param-${param}" class="form-label">${param}:</label>
+                <input type="number" id="param-${param}" class="form-control" value="${paramPresets[equation][param]}">
+            `;
+            nonVaryingParamsContainer.appendChild(paramDiv);
+        }
     });
 }
 
@@ -40,6 +62,13 @@ document.getElementById("generate-animation-btn").addEventListener("click", func
         return;
     }
 
+    let params = {};
+    Object.keys(paramPresets[equation]).forEach(param => {
+        if (param !== varyingParam) {
+            params[param] = parseFloat(document.getElementById(`param-${param}`).value);
+        }
+    });
+
     let payload = { 
         equation: equation,
         method: method,
@@ -49,7 +78,8 @@ document.getElementById("generate-animation-btn").addEventListener("click", func
             varying_param: varyingParam,
             min: minVal,
             max: maxVal,
-            step: step
+            step: step,
+            ...params
         }
     };
 
@@ -81,3 +111,4 @@ document.getElementById("replay-animation-btn").addEventListener("click", functi
 
 // Initialize parameters when the page loads
 document.addEventListener("DOMContentLoaded", updateAnimationParameters);
+document.getElementById("varying-param").addEventListener("change", updateNonVaryingParameters);
