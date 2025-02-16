@@ -43,6 +43,11 @@ function updateNonVaryingParameters() {
             nonVaryingParamsContainer.appendChild(paramDiv);
         }
     });
+
+    // Set default values for min, max, and step
+    document.getElementById("param-min").value = paramPresets[equation][varyingParam];
+    document.getElementById("param-max").value = paramPresets[equation][varyingParam] * 2;
+    document.getElementById("param-step").value = Math.abs(paramPresets[equation][varyingParam] / 10);
 }
 
 // Generate Animation Request
@@ -85,6 +90,9 @@ document.getElementById("generate-animation-btn").addEventListener("click", func
 
     console.log("Sending Animation Request:", payload);
 
+    // Show spinner
+    document.getElementById("spinner").style.display = "block";
+
     fetch("/animate/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -92,13 +100,20 @@ document.getElementById("generate-animation-btn").addEventListener("click", func
     })
     .then(response => response.json())
     .then(data => {
+        // Hide spinner
+        document.getElementById("spinner").style.display = "none";
+
         if (data.error) {
             alert("Animation Error BTN: " + data.error);
         } else {
             document.getElementById("animation-preview").src = data.animation_url;
         }
     })
-    .catch(error => console.error("Fetch Error:", error));
+    .catch(error => {
+        // Hide spinner
+        document.getElementById("spinner").style.display = "none";
+        console.error("Fetch Error:", error);
+    });
 });
 
 // Replay Animation

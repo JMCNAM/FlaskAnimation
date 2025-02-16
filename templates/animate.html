@@ -70,16 +70,18 @@
                     <legend class="h5">Set Non-Varying Parameters</legend>
                     <div id="non-varying-params-container"></div>
                 </fieldset>
-
-                <button type="button" id="generate-animation-btn" class="btn btn-success w-100 mt-3">Generate Animation</button>
-                <button type="button" id="replay-animation-btn" class="btn btn-primary w-100 mt-3">Replay Animation</button>
             </form>
         </div>
     </div>
 
     <!-- Right Column: Animation Output -->
-    <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+    <div class="col-md-6 d-flex flex-column align-items-center ">
+        <button type="button" id="generate-animation-btn" class="btn btn-success w-100 mt-3">Generate Animation</button>
+        <button type="button" id="replay-animation-btn" class="btn btn-primary w-100 mt-3">Replay Animation</button>
         <h2 class="text-center">Animation Preview</h2>
+        <div id="spinner" class="spinner-border text-primary mt-3" role="status" style="display: none;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
         <img id="animation-preview" src="" alt="Animation Output" class="img-fluid mt-3">
     </div>
 </div>
