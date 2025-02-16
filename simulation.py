@@ -33,7 +33,7 @@ def velocity_verlet(state, time, dt, derivs):
 
 def free_fall(state, time, g=-9.8):
     """Free fall motion under gravity."""
-    print(f"free_fall called with g={g}")
+    #print(f"free_fall called with g={g}")
     return np.array([state[1], g])
 
 def fluid_resistance(state, time, g=9.8, k=0.1, m=1.0):
