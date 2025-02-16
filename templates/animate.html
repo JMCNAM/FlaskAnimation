@@ -47,7 +47,7 @@
                     <legend class="h5">Select Parameter to Vary</legend>
                     <div class="mb-3">
                         <label for="varying-param" class="form-label">Parameter:</label>
-                        <select id="varying-param" class="form-select"></select>
+                        <select id="varying-param" class="form-select" onchange="updateNonVaryingParameters()"></select>
                     </div>
 
                     <div class="row">
@@ -66,16 +66,25 @@
                     </div>
                 </fieldset>
 
-                <button type="button" id="generate-animation-btn" class="btn btn-success w-100 mt-3">Generate Animation</button>
-                <button type="button" id="replay-animation-btn" class="btn btn-primary w-100 mt-3">Replay Animation</button>
+                <fieldset class="border p-3 mb-3">
+                    <legend class="h5">Set Non-Varying Parameters</legend>
+                    <div id="non-varying-params-container"></div>
+                </fieldset>
             </form>
         </div>
     </div>
 
     <!-- Right Column: Animation Output -->
-    <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
-        <h2 class="text-center">Animation Preview</h2>
-        <img id="animation-preview" src="" alt="Animation Output" class="img-fluid mt-3">
+    <div class="col-md-6 d-flex flex-column align-items-center">
+        <button type="button" id="generate-animation-btn" class="btn btn-success w-100 mt-3">Generate Animation</button>
+        <button type="button" id="replay-animation-btn" class="btn btn-primary w-100 mt-3">Replay Animation</button>
+        
+        <h2 id="animation-label" class="text-center" style="display: none;">Animation Preview</h2>  <!-- Hide initially -->
+        <div id="spinner" class="spinner-border text-primary mt-3" role="status" style="display: none;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        
+        <img id="animation-preview" src="" alt="Animation Output" class="img-fluid mt-3" style="display: none;">
     </div>
 </div>
 

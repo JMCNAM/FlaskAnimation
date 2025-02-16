@@ -76,6 +76,7 @@
                     alert("Simulation Error: " + data.error);
                 } else {
                     document.getElementById("simulation-graph").src = data.graph_url;
+                    document.getElementById("simulation-output").style.display = "block"; // Show only after generation
                 }
             })
             .catch(error => console.error("Fetch Error:", error));
