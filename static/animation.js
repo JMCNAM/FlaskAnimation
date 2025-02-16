@@ -71,5 +71,13 @@ document.getElementById("generate-animation-btn").addEventListener("click", func
     .catch(error => console.error("Fetch Error:", error));
 });
 
+// Replay Animation
+document.getElementById("replay-animation-btn").addEventListener("click", function() {
+    const animationPreview = document.getElementById("animation-preview");
+    const currentSrc = animationPreview.src;
+    animationPreview.src = "";  // Clear the src to force reload
+    animationPreview.src = currentSrc;  // Set the src back to the current URL
+});
+
 // Initialize parameters when the page loads
 document.addEventListener("DOMContentLoaded", updateAnimationParameters);

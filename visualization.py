@@ -41,11 +41,11 @@ def generate_animation(equation, varying_param, min_val, max_val, step, fixed_pa
 
     frame_paths = []  # Store file paths for imageio
     for frame, param_value in enumerate(param_values):
-        print(f"Generating frame {frame}: {equation} - {varying_param} = {param_value}")
+        #print(f"Generating frame {frame}: {equation} - {varying_param} = {param_value}")
 
         # Merge fixed and varying parameters
         sim_params = {**fixed_params, varying_param: param_value}
-        print("Sim Params:", sim_params)  # Debugging line
+        #print("Sim Params:", sim_params)  # Debugging line
 
         # Remove varying_param key from sim_params
         sim_params.pop("varying_param", None)
@@ -62,7 +62,7 @@ def generate_animation(equation, varying_param, min_val, max_val, step, fixed_pa
             t_total=t_total,
             N=N
         )
-        print("Simulation Config:", config)  # Debugging line
+        #print("Simulation Config:", config)  # Debugging line
 
         time, position, _ = simulation.run_simulation(config)
 
@@ -72,6 +72,9 @@ def generate_animation(equation, varying_param, min_val, max_val, step, fixed_pa
         ax.set_xlim(0, t_total)
         ax.set_ylim(-2, 2)
         ax.set_title(f"{equation} - {varying_param} = {param_value:.2f}")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Value")
+        ax.legend()
         frame_path = os.path.join(frame_dir, f"frame_{frame:03d}.png")
         fig.savefig(frame_path)
         plt.close(fig)  # Close figure to free memory
