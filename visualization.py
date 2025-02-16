@@ -39,6 +39,11 @@ def generate_animation(equation, varying_param, min_val, max_val, step, fixed_pa
     frame_dir = "static/animation_frames"
     os.makedirs(frame_dir, exist_ok=True)  # Ensure directory exists
 
+    # Delete existing GIF file if it exists
+    gif_path = "static/simulation.gif"
+    if os.path.exists(gif_path):
+        os.remove(gif_path)
+
     frame_paths = []  # Store file paths for imageio
     for frame, param_value in enumerate(param_values):
         #print(f"Generating frame {frame}: {equation} - {varying_param} = {param_value}")
