@@ -107,6 +107,7 @@ document.getElementById("generate-animation-btn").addEventListener("click", func
             alert("Animation Error BTN: " + data.error);
         } else {
             const animationPreview = document.getElementById("animation-preview");
+            document.getElementById("animation-preview").style.display = "block"; // Show only after generation
             animationPreview.src = "";  // Clear the src to force reload
             animationPreview.src = data.animation_url + "?t=" + Date.now();   // Set the src to the new URL
         }

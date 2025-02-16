@@ -67,8 +67,9 @@ Simulations
     <!-- Right Column: Simulation Output -->
     <div class="col-md-6 d-flex flex-column align-items-center">
         <button type="button" id="simulate-btn" class="btn btn-primary mb-2">Run Simulation</button>
-        <div>
-            <img id="simulation-graph" src="{{ graph_url }}" alt="Simulation Output" class="img-fluid mt-3">
+        <div id="simulation-output" style="display: none;">  <!-- Hide initially -->
+            <h2 class="text-center">Simulation Output</h2>
+            <img id="simulation-graph" src="" alt="Simulation Output" class="img-fluid mt-3">
         </div>
     </div>
 </div>
